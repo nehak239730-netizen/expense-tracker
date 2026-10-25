@@ -1,0 +1,50 @@
+### Sample requests. Works with the "REST Client" extension in VS Code or IntelliJ's HTTP client.
+@baseUrl = http://localhost:8080
+
+### 1. Create an expense
+POST {{baseUrl}}/api/expenses
+Content-Type: application/json
+
+{
+  "title": "Lunch at canteen",
+  "amount": 250.50,
+  "category": "Food",
+  "date": "2026-10-20",
+  "description": "Thali and lassi"
+}
+
+### 2. List all expenses
+GET {{baseUrl}}/api/expenses
+
+### 3. Get one expense
+GET {{baseUrl}}/api/expenses/1
+
+### 4. Update an expense
+PUT {{baseUrl}}/api/expenses/1
+Content-Type: application/json
+
+{
+  "title": "Dinner with family",
+  "amount": 900.00,
+  "category": "Food",
+  "date": "2026-10-21",
+  "description": "Updated entry"
+}
+
+### 5. Filter by date range
+GET {{baseUrl}}/api/expenses/filter?start=2026-10-01&end=2026-10-31
+
+### 6. Filter by date range + category
+GET {{baseUrl}}/api/expenses/filter?start=2026-10-01&end=2026-10-31&category=Food
+
+### 7. Summary
+GET {{baseUrl}}/api/expenses/summary?start=2026-10-01&end=2026-10-31
+
+### 8. Delete
+DELETE {{baseUrl}}/api/expenses/1
+
+### 9. Validation error demo (expects 400 with fieldErrors)
+POST {{baseUrl}}/api/expenses
+Content-Type: application/json
+
+{ "title": "", "amount": -10, "category": "", "date": "2099-01-01" }

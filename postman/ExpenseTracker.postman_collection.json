@@ -1,0 +1,119 @@
+{
+  "info": {
+    "name": "Expense Tracker API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8080" },
+    { "key": "expenseId", "value": "1" }
+  ],
+  "item": [
+    {
+      "name": "1. Create expense",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status is 201', function () { pm.response.to.have.status(201); });",
+              "pm.collectionVariables.set('expenseId', pm.response.json().id);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Lunch at canteen\",\n  \"amount\": 250.50,\n  \"category\": \"Food\",\n  \"date\": \"2026-10-20\",\n  \"description\": \"Thali and lassi\"\n}"
+        },
+        "url": { "raw": "{{baseUrl}}/api/expenses", "host": ["{{baseUrl}}"], "path": ["api", "expenses"] }
+      }
+    },
+    {
+      "name": "2. Get all expenses",
+      "request": {
+        "method": "GET",
+        "url": { "raw": "{{baseUrl}}/api/expenses", "host": ["{{baseUrl}}"], "path": ["api", "expenses"] }
+      }
+    },
+    {
+      "name": "3. Get expense by id",
+      "request": {
+        "method": "GET",
+        "url": { "raw": "{{baseUrl}}/api/expenses/{{expenseId}}", "host": ["{{baseUrl}}"], "path": ["api", "expenses", "{{expenseId}}"] }
+      }
+    },
+    {
+      "name": "4. Update expense",
+      "request": {
+        "method": "PUT",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Dinner with family\",\n  \"amount\": 900.00,\n  \"category\": \"Food\",\n  \"date\": \"2026-10-21\",\n  \"description\": \"Updated entry\"\n}"
+        },
+        "url": { "raw": "{{baseUrl}}/api/expenses/{{expenseId}}", "host": ["{{baseUrl}}"], "path": ["api", "expenses", "{{expenseId}}"] }
+      }
+    },
+    {
+      "name": "5. Filter by date range and category",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/expenses/filter?start=2026-10-01&end=2026-10-31&category=Food",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "expenses", "filter"],
+          "query": [
+            { "key": "start", "value": "2026-10-01" },
+            { "key": "end", "value": "2026-10-31" },
+            { "key": "category", "value": "Food" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "6. Summary (total, count, average)",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/expenses/summary?start=2026-10-01&end=2026-10-31",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "expenses", "summary"],
+          "query": [
+            { "key": "start", "value": "2026-10-01" },
+            { "key": "end", "value": "2026-10-31" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "7. Delete expense",
+      "request": {
+        "method": "DELETE",
+        "url": { "raw": "{{baseUrl}}/api/expenses/{{expenseId}}", "host": ["{{baseUrl}}"], "path": ["api", "expenses", "{{expenseId}}"] }
+      }
+    },
+    {
+      "name": "8. ERROR demo - invalid body (expect 400)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"\",\n  \"amount\": -10,\n  \"category\": \"\",\n  \"date\": \"2099-01-01\"\n}"
+        },
+        "url": { "raw": "{{baseUrl}}/api/expenses", "host": ["{{baseUrl}}"], "path": ["api", "expenses"] }
+      }
+    },
+    {
+      "name": "9. ERROR demo - id not found (expect 404)",
+      "request": {
+        "method": "GET",
+        "url": { "raw": "{{baseUrl}}/api/expenses/999999", "host": ["{{baseUrl}}"], "path": ["api", "expenses", "999999"] }
+      }
+    }
+  ]
+}
